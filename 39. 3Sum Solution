@@ -1,26 +1,31 @@
 #include <bits/stdc++.h> 
 vector<vector<int>> findTriplets(vector<int>nums, int n, int K) {
-	if(nums.size() < 3) return {};
+	if(n < 3) return {};
         sort(nums.begin(),nums.end());
-        if(nums[0] > K) return {};
         vector<vector<int>> ans;
-        unordered_map<int,int> m;
-        for(int i = 0; i<nums.size(); i++){
-            m[nums[i]] = i;
-        }
-        for(int i = 0; i<nums.size()-2; i++){
-            if(nums[i]>K)break;
-            for(int j= i+1; j<nums.size()-1; j++){
-                int cur = K - nums[i] - nums[j];
-                if(m.find(cur) != m.end()){
-                    if(m[cur] > j){
-                        vector<int> v = {nums[i],nums[j],cur};
-                        ans.push_back(v);
+        for(int i = 0; i<n-2; i++){
+            if(i == 0 || (i>0 && nums[i] != nums[i-1])){
+                int val = K-nums[i];
+                int low = i+1, high = n-1;
+                while(low<high){
+                    int cur = nums[low] + nums[high];
+                    if (cur == val) {
+                        ans.push_back({nums[i],nums[low],nums[high]});
+                        while(low<high && nums[low] == nums[low+1]) low++;
+                        low++;
+                        while(high>low && nums[high] == nums[high-1]) high--;
+                        high--;
+                    }
+                    else if(cur > val){
+                        while(high>low && nums[high] == nums[high-1]) high--;
+                        high--;
+                    }
+                    else{
+                        while(low<high && nums[low] == nums[low+1]) low++;
+                        low++;
                     }
                 }
-                j = m[nums[j]];
             }
-            i = m[nums[i]];
         }
         return ans;
 }
