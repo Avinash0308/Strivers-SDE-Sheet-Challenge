@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+using namespace std;
 void setZeros(vector<vector<int>> &matrix)
 {
 	int n = matrix.size();
